@@ -1,8 +1,10 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using CustomerImporter;
+using CustomerImporter.Repository;
 
-using CustomerImporter.Model;
+var httpClient = new HttpClient();
+var webShopApiConfiguration = new WebShopApiConfiguration();
+var webshopSoapApiClient = new WebshopSoapApiClient(httpClient,webShopApiConfiguration);
+var customerRepository = new CustomerRepository(webshopSoapApiClient);
 
-var customer = new Customer("John","", "Doe", 
-    "john.doe@datagroup.de", "123456", Customer.CustomerStatus.NORMAL);
-
-Console.WriteLine(customer);
+var customersList = await customerRepository.GetCustomers();
+customersList.ForEach(Console.WriteLine);
